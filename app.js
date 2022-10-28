@@ -33,11 +33,11 @@ app.get('/api/employeelist',(req,res)=>{
 
 
 //TODO: get single data from db  using api '/api/employeelist/:id'
-//app.get('/api/employeelist/:id',(req,res)=>{
-   // EmployeeData.findOne({"_id":req.params.id}).then({
-   //     res.send(data);  
-   // })
-   // })
+app.get('/api/employeelist/:id',(req,res)=>{
+    EmployeeData.findOne({"_id":req.params.id}).then({
+      
+ })
+   })
 
 
 
@@ -64,7 +64,26 @@ app.post('/api/employeelist',async(req,res)=>{
 
 //TODO: delete a employee data from db by using api '/api/employeelist/:id'
 
-
+app.delete = (req, res) => {
+    EmployeeData.findByIdAndRemove(req.params._id)
+    .then(EmployeeData => {
+        if(!EmployeeData) {
+            return res.status(404).send({
+                message: "Note not found with id " + req.params._id
+            });
+        }
+        res.send({message: "Note deleted successfully!"});
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "Note not found with id " + req.params._id
+            });                
+        }
+        return res.status(500).send({
+            message: "Could not delete EmployeeData with id " + req.params._id
+        });
+    });
+};
 
 
 
